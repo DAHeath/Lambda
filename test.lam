@@ -1,1 +1,4 @@
-(\n f x.f (n f x)) (\f x.f x)
+succ = \n f x.f (n f x) ;
+one  = \f x.f x ;
+
+main = succ one
