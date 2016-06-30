@@ -1,6 +1,6 @@
 module Lambda where
 
-import Text.Parsec (parse, ParseError, many, (<|>))
+import Text.Parsec (parse, ParseError, many, many1, (<|>))
 import Text.Parsec.String (Parser)
 import Text.Parsec.Language (haskellDef)
 import qualified Text.Parsec.Token as P
@@ -40,10 +40,10 @@ parseTerm = do x <- nonApp
                (foldl App x <$> many nonApp) <|> pure x
   where nonApp = parens parseTerm
              <|> do lambda
-                    v <- identifier
+                    vs <- many1 identifier
                     symbol "."
                     t <- parseTerm
-                    return $ Lam v t
+                    return $ foldr Lam t vs
              <|> Var <$> identifier
         lambda = symbol "\\" <|> symbol "λ"
 
