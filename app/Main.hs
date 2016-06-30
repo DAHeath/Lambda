@@ -1,6 +1,10 @@
 module Main where
 
-import Lib
+import Lambda
+import System.Environment (getArgs)
 
 main :: IO ()
-main = someFunc
+main = do res <- run . concat <$> getArgs
+          case res of
+            Left p  -> print p
+            Right s -> putStrLn s
